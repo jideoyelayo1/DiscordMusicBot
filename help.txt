@@ -9,3 +9,23 @@ When you say PING i say PONG, when you say MARCO i say POLO
 I'm like your best friend lol XD
 you can message me privately by saying ?private or publicly by saying ?hello
 MUSIC SETTINGS:
+?viewurls displays the urls in the playlist
+?deletelast deletes last url in the playlist
+?addurl add url to the playlist
+?addsong add song to the playlist
+?playurl plays this url if nothing else is playing
+?play plays song even if something is alreaady playing
+?pause pause music
+?resume resume music
+?stop stop and discount bot
+?clear clear playlist
+?skip skip song in playlist
+?back goes back a song in playlist
+?resetIndex starts playlist from beginning
+?currentPlaylistSong displays song currently playing
+?stopplaylist stops playlist similar to ?stop but also resets playlist to beginning
+?startplaylist starts playing songs in playlist
+MORE features soon to be added.
+for more information contact maker of this bot:
+Github: jideoyelayo1
+Email: JideOyelayo1@Gmail.com

@@ -65,10 +65,10 @@ async def on_message(message):
         await message.channel.send('pong')
     if message.content.lower() == 'marco':
         await message.channel.send('polo')
-    if message.content.startswith('#hello'):
+    if message.content.startswith('?hello'):
         await message.channel.send(f"Hello @{username} I am a still learning how to do thing around here\nLet me know "
                                    f"what you need")
-    if message.content == '#private':
+    if message.content == '?private':
         await message.author.send("Why are you asking to speak to me in private. You are a bit sus mate")
     for word in blocked_words:
         if "Coder" not in str(message.author.roles) and word in str(message.content.lower()):
@@ -131,7 +131,7 @@ async def on_message(message):
         except Exception as err:
             print(err)
             await message.channel.send(f"{err}")
-    if message.content.startswith("?play"):
+    if message.content.startswith("?play") and not message.content.startswith("?playurl"):
         playingSong = False
         tryCNT = 0
         while not playingSong:
