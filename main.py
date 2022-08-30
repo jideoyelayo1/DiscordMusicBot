@@ -131,6 +131,8 @@ async def on_message(message):
             await message.channel.send(f"Now playing {url}")
 
         except Exception as err:
+            if str(err) == "748475689187016806":
+                await message.channel.send("You are not in a voice channel!")
             print(err)
             await message.channel.send(f"{err}")
     if message.content.startswith("?play") and not message.content.startswith("?playurl"):
@@ -165,6 +167,8 @@ async def on_message(message):
                 playingSong = True
 
             except Exception as err:
+                if str(err) == "748475689187016806":
+                    await message.channel.send("You are not in a voice channel!")
                 ## stops an endless loop
                 tryCNT += 1
                 if tryCNT > 1:
