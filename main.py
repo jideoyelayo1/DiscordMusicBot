@@ -1,3 +1,6 @@
+import random
+import time
+
 import discord
 import os
 import youtube_dl
@@ -7,6 +10,7 @@ import re
 
 TOKEN = open('TOKEN.txt', 'r').read()
 listOfUrls = []
+songIdx = 0
 
 intents = discord.Intents.all()
 
@@ -28,7 +32,7 @@ async def on_ready():
 
 
 @client.event
-async def on_message(message):
+async def on_message(message, songIdx=0):
     if message.author == client.user:
         return
 
@@ -42,6 +46,19 @@ async def on_message(message):
     user_message = str(message.content)
     channel = str(message.channel.name)
     print(f'{username}:{user_message}:({channel})')
+
+    if message.content.startswith('?random') or message.content.startswith('?odds'):
+        try:
+            num = int(message.content.split()[1])
+            rnd = random.randint(0, num)
+            await message.channel.send(f"picking a number from 0 to {num}")
+            time.sleep(5)
+            await message.channel.send(f'Computer has randomly picked {rnd}')
+        except:
+            if random.randint(0, 3) == 2 and "Slaves" in str(message.author.roles):
+                await message.channel.send("Wait\n why is this slave speaking to me?")
+            else:
+                await message.channel.send("Invalid input")
 
     if message.content.lower() == 'ping':
         await message.channel.send('pong')
@@ -185,6 +202,12 @@ async def on_message(message):
             await message.channel.send("safe you man")
         except Exception as err:
             print(err)
-
+    if message.content.startswith('?startplaylist'):
+        return
+    if message.content.startswith('?clear'):
+        for i in range(songIdx):
+            del listOfUrls[i]
+        await message.channel.send("Cleared playlist")
+        return
 
 client.run(TOKEN)
