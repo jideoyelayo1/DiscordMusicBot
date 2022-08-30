@@ -42,6 +42,10 @@ async def on_message(message):
         for line in helptxt:
             await message.author.send(line)
         return
+    if str(message.channel).startswith('Direct Message'):
+        with open('messagesforbot.txt', 'a') as f:
+            f.write(f"Author| {message.author}: Time| {str(message.created_at)[0:19]} : Message| {message.content} \n")
+        return
 
     username = str(message.author).split('#')[0]
     user_message = str(message.content)
