@@ -6,6 +6,7 @@ import urllib.request
 import re
 
 TOKEN = open('TOKEN.txt', 'r').read()
+listOfUrls = []
 
 intents = discord.Intents.all()
 
@@ -51,6 +52,30 @@ async def on_message(message):
                 f"{username} please refrain from using language like that in this discord server!")
             return
     ############
+    if message.content.startswith("?viewurls"):
+        if not listOfUrls:
+            await message.channel.send("List is empty")
+            return
+        await message.channel.send("List of urls:")
+        for url in listOfUrls:
+            await message.channel.send(url)
+
+    if message.content.startswith("?addurl"):
+        listOfUrls.append(message.content.split()[1])
+        await message.channel.send(f"{listOfUrls[-1]} has been added to the list")
+    if message.content.startswith("?addsong"):
+        try:
+            search_keyword = message.content[5:].replace(' ', '')
+            html = urllib.request.urlopen("https://www.youtube.com/results?search_query=" + search_keyword)
+            video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
+            print("https://www.youtube.com/watch?v=" + video_ids[0])
+
+            listOfUrls.append("https://www.youtube.com/watch?v=" + video_ids[0])
+            await message.channel.send(f"{listOfUrls[-1]} has been added to the list")
+        except Exception as err:
+            await message.channel.send(f"failed to add {listOfUrls[-1]}")
+            print(err)
+
     if message.content.startswith("?playurl"):
 
         try:
@@ -75,6 +100,7 @@ async def on_message(message):
 
         except Exception as err:
             print(err)
+            await message.channel.send(f"You are not in a voice channel!")
     if message.content.startswith("?play"):
 
         try:
@@ -104,6 +130,7 @@ async def on_message(message):
 
         except Exception as err:
             print(err)
+            await message.channel.send(f"You are not in a voice channel!")
 
     if message.content.startswith("?pause"):
         try:
