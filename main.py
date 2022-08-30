@@ -59,6 +59,11 @@ async def on_message(message):
         await message.channel.send("List of urls:")
         for url in listOfUrls:
             await message.channel.send(url)
+    if message.content.startswith("?deletelast"):
+        if not listOfUrls:
+            await message.channel.send("List is empty")
+        else:
+            del listOfUrls[-1]
 
     if message.content.startswith("?addurl"):
         listOfUrls.append(message.content.split()[1])
