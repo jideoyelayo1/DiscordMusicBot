@@ -32,7 +32,8 @@ async def on_ready():
 
 
 @client.event
-async def on_message(message, songIdx=0):
+async def on_message(message):
+    global songIdx
     if message.author == client.user:
         return
 
@@ -207,6 +208,13 @@ async def on_message(message, songIdx=0):
         for i in range(songIdx):
             del listOfUrls[i]
         await message.channel.send("Cleared playlist")
+
+    if message.content.startswith('?skip'):
+        if songIdx < len(listOfUrls):
+            await message.channel.send(f"{listOfUrls[songIdx]} skipped")
+            songIdx += 1
+        else:
+            await message.channel.send("no song to skip")
 
     if message.content.startswith('?startplaylist'):
         return
