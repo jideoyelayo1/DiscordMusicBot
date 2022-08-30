@@ -105,37 +105,55 @@ async def on_message(message):
 
         except Exception as err:
             print(err)
-            await message.channel.send(f"You are not in a voice channel!")
+            await message.channel.send(f"{err}")
     if message.content.startswith("?play"):
+        playingSong = False
+        tryCNT = 0
+        while not playingSong:
 
-        try:
-            voice_client = await message.author.voice.channel.connect()
-            voice_clients[voice_client.guild.id] = voice_client
-        except:
-            print("error")
+            try:
+                voice_client = await message.author.voice.channel.connect()
+                voice_clients[voice_client.guild.id] = voice_client
+            except:
+                print("error")
 
-        try:
-            search_keyword = message.content[5:].replace(' ', '')
-            html = urllib.request.urlopen("https://www.youtube.com/results?search_query=" + search_keyword)
-            video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
-            print("https://www.youtube.com/watch?v=" + video_ids[0])
+            try:
+                search_keyword = message.content[5:].replace(' ', '')
+                html = urllib.request.urlopen("https://www.youtube.com/results?search_query=" + search_keyword)
+                video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
+                print("https://www.youtube.com/watch?v=" + video_ids[0])
 
-            url = "https://www.youtube.com/watch?v=" + video_ids[0]
+                url = "https://www.youtube.com/watch?v=" + video_ids[0]
 
-            loop = asyncio.get_event_loop()
-            data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
+                loop = asyncio.get_event_loop()
+                data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
 
-            song = data['url']
-            player = discord.FFmpegPCMAudio(song, **ffmpeg_options,
-                                            executable="C:\\Users\\JideO\\Downloads\\ezyZip\\ffmpeg-2022-08-29-git"
-                                                       "-f99d15cca0-full_build\\bin\\ffmpeg.exe")
+                song = data['url']
+                player = discord.FFmpegPCMAudio(song, **ffmpeg_options,
+                                                executable="C:\\Users\\JideO\\Downloads\\ezyZip\\ffmpeg-2022-08-29-git"
+                                                           "-f99d15cca0-full_build\\bin\\ffmpeg.exe")
 
-            voice_clients[message.guild.id].play(player)
-            await message.channel.send(f"Now playing {url}")
+                voice_clients[message.guild.id].play(player)
+                await message.channel.send(f"Now playing {url}")
+                playingSong = True
 
-        except Exception as err:
-            print(err)
-            await message.channel.send(f"You are not in a voice channel!")
+            except Exception as err:
+                ## stops an endless loop
+                tryCNT += 1
+                if tryCNT > 1:
+                    break
+                print(err)
+                if str(err) == "Already playing audio.":
+                    try:
+                        voice_clients[message.guild.id].stop()
+                        await voice_clients[message.guild.id].disconnect()
+                        playingSong = False
+                    except:
+                        pass
+                else:
+                    await message.channel.send(f"{err}")
+                    if str(err) == "Not connected to voice.":
+                        break
 
     if message.content.startswith("?pause"):
         try:
