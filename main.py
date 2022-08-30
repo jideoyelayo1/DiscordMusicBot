@@ -210,11 +210,28 @@ async def on_message(message):
         await message.channel.send("Cleared playlist")
 
     if message.content.startswith('?skip'):
-        if songIdx < len(listOfUrls):
+        if songIdx < len(listOfUrls) - 1:
             await message.channel.send(f"{listOfUrls[songIdx]} skipped")
             songIdx += 1
         else:
             await message.channel.send("no song to skip")
+    if message.content.startswith('?back'):
+        if len(listOfUrls)  > songIdx > 0:
+            await message.channel.send(f"{listOfUrls[songIdx]} included")
+            songIdx -= 1
+        else:
+            await message.channel.send("no song to include")
+    if message.content.startswith('?resetIndex'):
+        songIdx = 0
+        await message.channel.send(f"index is {songIdx}")
+    if message.content.startswith('?currentPlaylistSong'):
+        try:
+            await message.channel.send(listOfUrls[songIdx])
+        except Exception as err:
+            await message.channel.send("Can not display current song in playlist")
+            print(err)
+
+
 
     if message.content.startswith('?startplaylist'):
         return
