@@ -202,12 +202,14 @@ async def on_message(message, songIdx=0):
             await message.channel.send("safe you man")
         except Exception as err:
             print(err)
-    if message.content.startswith('?startplaylist'):
-        return
+
     if message.content.startswith('?clear'):
         for i in range(songIdx):
             del listOfUrls[i]
         await message.channel.send("Cleared playlist")
+
+    if message.content.startswith('?startplaylist'):
         return
+
 
 client.run(TOKEN)
