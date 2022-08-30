@@ -37,6 +37,8 @@ async def on_message(message):
         return
     if message.content.lower() == 'ping':
         await message.channel.send('pong')
+    if message.content.lower() == 'marco':
+        await message.channel.send('polo')
     if message.content.startswith('#hello'):
         await message.channel.send(f"Hello @{username} I am a still learning how to do thing around here\nLet me know "
                                    f"what you need")
