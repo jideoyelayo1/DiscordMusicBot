@@ -47,6 +47,8 @@ async def on_message(message):
     user_message = str(message.content)
     channel = str(message.channel.name)
     print(f'{username}:{user_message}:({channel})')
+    if "hear me out" in message.content.lower():
+        await message.channel.send("I am listening 👀")
 
     if message.content.startswith('?random') or message.content.startswith('?odds'):
         try:
