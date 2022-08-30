@@ -216,7 +216,7 @@ async def on_message(message):
         else:
             await message.channel.send("no song to skip")
     if message.content.startswith('?back'):
-        if len(listOfUrls)  > songIdx > 0:
+        if len(listOfUrls) > songIdx > 0:
             await message.channel.send(f"{listOfUrls[songIdx]} included")
             songIdx -= 1
         else:
@@ -230,11 +230,51 @@ async def on_message(message):
         except Exception as err:
             await message.channel.send("Can not display current song in playlist")
             print(err)
-
-
+    if message.content.startswith('?stopplaylist'):
+        looping = False
+        songIdx = 0
+        try:
+            voice_clients[message.guild.id].stop()
+            await voice_clients[message.guild.id].disconnect()
+            await message.channel.send("safe you man")
+        except Exception as err:
+            print(err)
 
     if message.content.startswith('?startplaylist'):
-        return
+        looping = True
+        while looping and songIdx < len(listOfUrls):
+            playingSong = False
+            while not playingSong:
+
+                try:
+                    voice_client = await message.author.voice.channel.connect()
+                    voice_clients[voice_client.guild.id] = voice_client
+                except:
+                    print("error")
+
+                try:
+                    url = listOfUrls[songIdx]
+                    loop = asyncio.get_event_loop()
+                    data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
+
+                    song = data['url']
+                    player = discord.FFmpegPCMAudio(song, **ffmpeg_options,
+                                                    executable="C:\\Users\\JideO\\Downloads\\ezyZip\\ffmpeg-2022-08-29-git"
+                                                               "-f99d15cca0-full_build\\bin\\ffmpeg.exe")
+
+                    voice_clients[message.guild.id].play(player)
+                    await message.channel.send(f"Now playing {url}")
+                    playingSong = True
+                    songIdx += 1
+
+                except Exception as err:
+                    print(err)
+                    if str(err) == "Already playing audio.":
+                        pass
+                    else:
+                        print(err)
+                        looping = False
+                        break
 
 
 client.run(TOKEN)
