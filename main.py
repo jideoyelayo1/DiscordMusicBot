@@ -29,13 +29,20 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    if message.author == client.user:
+        return
+
+    if message.content.startswith('?help'):
+        helptxt = open('help.txt', 'r').readlines()
+        for line in helptxt:
+            await message.author.send(line)
+        return
+
     username = str(message.author).split('#')[0]
     user_message = str(message.content)
     channel = str(message.channel.name)
     print(f'{username}:{user_message}:({channel})')
 
-    if message.author == client.user:
-        return
     if message.content.lower() == 'ping':
         await message.channel.send('pong')
     if message.content.lower() == 'marco':
