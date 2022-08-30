@@ -16,7 +16,7 @@ intents = discord.Intents.all()
 
 client = discord.Client(intents=intents)
 
-blocked_words = ["nigger", "tarbaby"]
+blocked_words = open('blocked_words.txt', 'r').readlines()
 
 voice_clients = {}
 

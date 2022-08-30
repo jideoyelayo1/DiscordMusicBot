@@ -1,2 +1,11 @@
-hello
-i am a bot
+Hello there
+I am a discord bot
+I was initially made to help with music but I also can do other cool things
+I dmed you this message because you sent me a "?help"
+If you ever want to a random number you can say "?random" or "?odds" followed by a number
+I will then give you a random integer between 0 and your number
+I block words as well
+When you say PING i say PONG, when you say MARCO i say POLO
+I'm like your best friend lol XD
+you can message me privately by saying ?private or publicly by saying ?hello
+MUSIC SETTINGS:
