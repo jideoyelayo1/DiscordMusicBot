@@ -8,6 +8,8 @@ import asyncio
 import urllib.request
 import re
 
+HasWokenUp = False
+
 TOKEN = open('TOKEN.txt', 'r').read()
 listOfUrls = []
 songIdx = 0
@@ -33,9 +35,19 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    # global variables
     global songIdx
+    global HasWokenUp
+    # so bot ignores itself
     if message.author == client.user:
         return
+    # commands
+    if not HasWokenUp:
+        HasWokenUp = True
+        wakeupmessages = open('wakeupmessages.txt', 'r').readlines()
+        wakeupmessage = wakeupmessages[random.randint(0, len(wakeupmessages) - 1)]
+        await client.get_channel(812437044935786527).send(wakeupmessage)
+        print("I have woken everyone up")
 
     if message.content.startswith('?help'):
         helptxt = open('help.txt', 'r').readlines()
@@ -74,6 +86,10 @@ async def on_message(message):
 
     if message.content.lower() == 'ping':
         await message.channel.send('pong')
+
+    if message.content.lower() == 'pong':
+        await message.channel.send('ping')
+
     if message.content.lower() == 'marco':
         await message.channel.send('polo')
     if message.content.startswith('?hello'):
@@ -97,6 +113,7 @@ async def on_message(message):
             await message.channel.send(f"I could never insult {name}!\nI love him🥺")
         else:
             await message.channel.send(f"Fuck you {name}!")
+
 
     if message.content.startswith("?viewurls"):
         if not listOfUrls:
