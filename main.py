@@ -88,6 +88,16 @@ async def on_message(message):
                 f"{username} please refrain from using language like that in this discord server!")
             return
     ############
+    if message.content.startswith('?greet'):
+        name = str(message.content).split()[1]
+        await message.channel.send(f"Hi {name}, how are you?")
+    if message.content.startswith('?insult'):
+        name = str(message.content).split()[1]
+        if "jide" in name and "jide" not in str(message.author):
+            await message.channel.send(f"I could never insult {name}!\nI love him🥺")
+        else:
+            await message.channel.send(f"Fuck you {name}!")
+
     if message.content.startswith("?viewurls"):
         if not listOfUrls:
             await message.channel.send("List is empty")
