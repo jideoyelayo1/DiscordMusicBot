@@ -20,11 +20,15 @@ MUSIC SETTINGS:
 ?stop stop and discount bot
 ?clear clear playlist
 ?skip skip song in playlist
+?rewind restart current song in playlist
 ?back goes back a song in playlist
 ?resetIndex starts playlist from beginning
 ?currentPlaylistSong displays song currently playing
 ?stopplaylist stops playlist similar to ?stop but also resets playlist to beginning
 ?startplaylist starts playing songs in playlist
+?save save the current message you are typing
+?showsaved dms you your saved messages
+?deletesaved all your saved messages
 MORE features soon to be added.
 for more information contact maker of this bot:
 Github: jideoyelayo1

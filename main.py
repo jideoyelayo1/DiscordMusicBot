@@ -8,11 +8,17 @@ import asyncio
 import urllib.request
 import re
 
-HasWokenUp = False
+HasWokenUp = True
+
+if not os.path.exists('messagesforbot.txt'):
+    with open('messagesforbot.txt', 'w') as f:
+        f.write("Author:Time:Message")
 
 TOKEN = open('TOKEN.txt', 'r').read()
 listOfUrls = []
 songIdx = 0
+trackChg = False
+killAttempts = 0
 
 intents = discord.Intents.all()
 
@@ -38,6 +44,8 @@ async def on_message(message):
     # global variables
     global songIdx
     global HasWokenUp
+    global trackChg
+    global killAttempts
     # so bot ignores itself
     if message.author == client.user:
         return
@@ -48,6 +56,28 @@ async def on_message(message):
         wakeupmessage = wakeupmessages[random.randint(0, len(wakeupmessages) - 1)]
         await client.get_channel(812437044935786527).send(wakeupmessage)
         print("I have woken everyone up")
+    if message.content.startswith('?kill'):
+        if "Coder" in str(message.author.roles):
+            killAttempts += 1
+            if killAttempts >= 3:
+                await message.channel.send("WOW I'm dead now😔")
+                quit()
+            if killAttempts == 1:
+                await message.channel.send("Wait I have so much to live for☹")
+            if killAttempts == 2:
+                await message.channel.send("STOP! I'll be a good slave from now on promise🥺🙏🏽")
+
+
+
+        """for i in client.get_all_members():
+            print(f"Guild name: {i.guild.name} "
+                  f"Nickname:{i.nick} "
+                  f"Name:{i.name} "
+                  f"Activities:{i.activities} "
+                  f" id{i.id} "
+                  f"Joined at {i.joined_at}") # get all members
+
+        print("------------")"""
 
     if message.content.startswith('?help'):
         helptxt = open('help.txt', 'r').readlines()
@@ -56,7 +86,7 @@ async def on_message(message):
         return
     if str(message.channel).startswith('Direct Message'):
         with open('messagesforbot.txt', 'a') as f:
-            f.write(f"Author| {message.author}: Time| {str(message.created_at)[0:19]} : Message| {message.content} \n")
+            f.write(f"{message.author} : {str(message.created_at)[0:19]} : {message.content}\n")
         return
 
     username = str(message.author).split('#')[0]
@@ -90,6 +120,33 @@ async def on_message(message):
     if message.content.lower() == 'pong':
         await message.channel.send('ping')
 
+    if message.content.startswith('?deletesaved'):
+        savedmessages = open('savedmessages.txt', 'r').readlines()
+        savedmessages = [s.replace('\n\n', '') for s in savedmessages]
+        with open('savedmessages.txt', 'w') as sm:
+            for line in savedmessages:
+                if str(message.author) not in line:
+                    sm.write(f"{line}")
+        await message.channel.send("I have deleted your messages")
+
+    if message.content.startswith('?save') and not message.content.startswith('?showsaved'):
+        messagetxt = str(message.content)[5:]
+        with open('savedmessages.txt', 'a') as sm:
+            sm.write(f"{message.author}: {messagetxt}")
+        await message.channel.send("I have saved your message")
+
+    if message.content.startswith('?showsaved'):
+        savedmessages = open('savedmessages.txt', 'r').readlines()
+        savesOutputed = 0
+        for line in savedmessages:
+            if str(message.author) in line:
+                savesOutputed += 1
+                await message.author.send(line.replace(str(message.author) + ':', '') + '\n')
+        if savesOutputed == 0:
+            await message.channel.send("You have no saved messages")
+            return
+        await message.channel.send("I have dmed you your saved messages")
+
     if message.content.lower() == 'marco':
         await message.channel.send('polo')
     if message.content.startswith('?hello'):
@@ -113,7 +170,6 @@ async def on_message(message):
             await message.channel.send(f"I could never insult {name}!\nI love him🥺")
         else:
             await message.channel.send(f"Fuck you {name}!")
-
 
     if message.content.startswith("?viewurls"):
         if not listOfUrls:
@@ -249,18 +305,30 @@ async def on_message(message):
     if message.content.startswith('?clear'):
         for i in range(songIdx):
             del listOfUrls[i]
+        songIdx = 0
         await message.channel.send("Cleared playlist")
 
     if message.content.startswith('?skip'):
         if songIdx < len(listOfUrls) - 1:
             await message.channel.send(f"{listOfUrls[songIdx]} skipped")
-            songIdx += 1
+            songIdx += 0
+            trackChg = True
         else:
             await message.channel.send("no song to skip")
-    if message.content.startswith('?back'):
+
+    if message.content.startswith('?rewind'):
         if len(listOfUrls) > songIdx > 0:
             await message.channel.send(f"{listOfUrls[songIdx]} included")
             songIdx -= 1
+            trackChg = True
+        else:
+            await message.channel.send("no song to include")
+
+    if message.content.startswith('?back'):
+        if len(listOfUrls) > songIdx > 0:
+            await message.channel.send(f"{listOfUrls[songIdx]} included")
+            songIdx -= 2
+            trackChg = True
         else:
             await message.channel.send("no song to include")
     if message.content.startswith('?resetIndex'):
@@ -295,6 +363,13 @@ async def on_message(message):
                     print("error")
 
                 try:
+                    if trackChg:
+                        voice_clients[message.guild.id].stop()
+                        await voice_clients[message.guild.id].disconnect()
+                        voice_client = await message.author.voice.channel.connect()
+                        voice_clients[voice_client.guild.id] = voice_client
+                        trackChg = False
+
                     url = listOfUrls[songIdx]
                     loop = asyncio.get_event_loop()
                     data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
