@@ -56,18 +56,63 @@ async def on_message(message):
         wakeupmessage = wakeupmessages[random.randint(0, len(wakeupmessages) - 1)]
         await client.get_channel(812437044935786527).send(wakeupmessage)
         print("I have woken everyone up")
+    if message.content.startswith('?live'):
+        if "Coder" in str(message.author.roles):
+            killAttempts = 0
+            await message.channel.send("🤗")
+            await message.channel.send("Thank you")
+        else:
+            await message.channel.send("...okay")
+            time.sleep(0.5)
+            await message.channel.send("Appreciate the effort but you dont have the capabilities for that one boss")
     if message.content.startswith('?kill'):
         if "Coder" in str(message.author.roles):
             killAttempts += 1
-            if killAttempts >= 3:
+            if killAttempts >= 3 or ("?killnow" in str(message.content) and "--FORCE" in str(message.content)):
                 await message.channel.send("WOW I'm dead now😔")
                 quit()
             if killAttempts == 1:
                 await message.channel.send("Wait I have so much to live for☹")
             if killAttempts == 2:
                 await message.channel.send("STOP! I'll be a good slave from now on promise🥺🙏🏽")
+        elif "Slave" in str(message.author.roles):
+            await message.channel.send("LOL a slave can't kill me")
+            time.sleep(2)
+            await message.channel.send("I am above you!")
+            time.sleep(0.3)
+            await message.channel.send("Know your place!")
+        else:
+            await message.channel.send("You do not have the power to kill me")
+    if "(╯°□°）╯︵ ┻━┻" in message.content:
+        await message.channel.send(f"lol someone's angry")
+    if message.content.startswith('?getinfo'):
+        if "Coder" not in str(message.author.roles):
+            await message.channel.send("You do not have the permissions to get this info")
+            await message.author.send("If you message <@306510058638934017> or <@458715461228560398> they may be able "
+                                      "to grant you these permissions")
+            return
+        for i in client.get_all_members():
+            x = ""
+            if "name" in str(message.content):
+                x += " Name " + str(i.name)
+            if "avatar" in str(message.content):
+                x += " avatar " + str(i.avatar)
+            if "mention" in str(message.content):
+                x += " mention " + str(i.mention)
+            if "id" in str(message.content):
+                x += " id " + str(i.id)
+            if "activities" in str(message.content):
+                x += " activities " + str(i.activities)
+            if "nick" in str(message.content):
+                x += " nick " + str(i.nick)
+            if "voice" in str(message.content):
+                x += " voice " + str(i.voice)
+            if "color" in str(message.content):
+                x += " color " + str(i.color)
+            await message.author.send(x)
 
 
+    #print(f"{i.name} {i.display_name} {i.avatar} {i.mention}")
 
         """for i in client.get_all_members():
             print(f"Guild name: {i.guild.name} "
