@@ -8,7 +8,7 @@ import asyncio
 import urllib.request
 import re
 
-HasWokenUp = True
+HasWokenUp = False
 
 if not os.path.exists('messagesforbot.txt'):
     with open('messagesforbot.txt', 'w') as f:
@@ -68,7 +68,7 @@ async def on_message(message):
     if message.content.startswith('?kill'):
         if "Coder" in str(message.author.roles):
             killAttempts += 1
-            if killAttempts >= 3 or ("?killnow" in str(message.content) and "--FORCE" in str(message.content)):
+            if killAttempts >= 3 or ("?killnow" in str(message.content) and "FORCE" in str(message.content)):
                 await message.channel.send("WOW I'm dead now😔")
                 quit()
             if killAttempts == 1:
