@@ -8,7 +8,7 @@ import asyncio
 import urllib.request
 import re
 
-HasWokenUp = False
+HasWokenUp = True
 
 if not os.path.exists('messagesforbot.txt'):
     with open('messagesforbot.txt', 'w') as f:
@@ -46,6 +46,8 @@ async def on_message(message):
     global HasWokenUp
     global trackChg
     global killAttempts
+    #global blocked_words
+    #blocked_words = open('blocked_words.txt', 'r').readlines()
     # so bot ignores itself
     if message.author == client.user:
         return
@@ -128,11 +130,24 @@ async def on_message(message):
         helptxt = open('help.txt', 'r').readlines()
         for line in helptxt:
             await message.author.send(line)
-        return
+
     if str(message.channel).startswith('Direct Message'):
         with open('messagesforbot.txt', 'a') as f:
             f.write(f"{message.author} : {str(message.created_at)[0:19]} : {message.content}\n")
         return
+    if message.content.startswith('?BanWord'):
+        if 'Coder' not in str(message.author.roles):
+            await message.channel.send("You can't ban words")
+        else:
+            with open('blocked_words.txt', 'a') as f:
+                f.write(str(message.content)[8:])
+            await message.channel.send("Word Banned")
+
+    if message.content.startswith('?showBanList'):
+        await message.channel.send("Word Banned:")
+        for i in blocked_words:
+            await message.author.send(i)
+
 
     username = str(message.author).split('#')[0]
     user_message = str(message.content)
@@ -204,7 +219,6 @@ async def on_message(message):
             await message.delete()
             await message.channel.send(
                 f"{username} please refrain from using language like that in this discord server!")
-            return
     ############
     if message.content.startswith('?greet'):
         name = str(message.content).split()[1]
