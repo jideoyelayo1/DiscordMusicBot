@@ -26,7 +26,7 @@ To run this bot, you will need:
 * Install the required packages using the command: pip install -r requirements.txt
 * Create a Discord bot account and get the bot token.
 * Add the bot to your server using the invite link.
-* Rename the .env.sample file to .env and enter your bot token in the DISCORD_TOKEN field.
+* Create a text file called ``` TOKEN.txt ``` and place your discord token inside
 <h2>Getting Started</h2>
 
 * Start the bot using the command python bot.py.
