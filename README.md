@@ -1,4 +1,4 @@
-#Discord Bot
+<h1>Discord Bot</h1>
 Welcome to the Discord Bot repository! This bot is a Python-based bot that uses the YouTubeDL API and Discord API to provide various features to your Discord server.
 
 <h2>Introduction</h2>
