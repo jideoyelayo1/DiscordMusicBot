@@ -7,14 +7,22 @@ import youtube_dl
 import asyncio
 import urllib.request
 import re
+import openai
 
-HasWokenUp = True
+
+
+HasWokenUp = False
+NoSwearing = False
 
 if not os.path.exists('messagesforbot.txt'):
     with open('messagesforbot.txt', 'w') as f:
         f.write("Author:Time:Message")
 
 TOKEN = open('TOKEN.txt', 'r').read()
+OPEN_API_KEY = open('openai_key.txt', 'r').read()
+
+openai.api_key = OPEN_API_KEY
+
 listOfUrls = []
 songIdx = 0
 trackChg = False
@@ -46,18 +54,53 @@ async def on_message(message):
     global HasWokenUp
     global trackChg
     global killAttempts
+    global NoSwearing
     #global blocked_words
     #blocked_words = open('blocked_words.txt', 'r').readlines()
     # so bot ignores itself
     if message.author == client.user:
         return
+    
+    ## Sorting message
+    username = str(message.author).split('#')[0]
+    user_message = str(message.content)
+    channel = str(message.channel.name)
+    print(f'{username}:{user_message}:({channel})')
+
     # commands
+    if message.content.startswith('?wakeup') and not HasWokenUp and "Coder" in str(message.author.roles):
+        HasWokenUp = True
+        wakeupmessages = open('wakeupmessages.txt', 'r').readlines()
+        wakeupmessage = wakeupmessages[random.randint(0, len(wakeupmessages) - 1)]
+        await message.channel.send(wakeupmessage)
+        print("I have woken everyone up")
+    elif not HasWokenUp:
+        return
+    elif message.content.startswith('?sleep') and HasWokenUp:
+        HasWokenUp = False
+        await message.channel.send("I am going to sleep now")
+        return
+    elif message.content.startswith('?wakeup') and HasWokenUp:
+        await message.channel.send("I am already awake")
+        return
     if not HasWokenUp:
         HasWokenUp = True
         wakeupmessages = open('wakeupmessages.txt', 'r').readlines()
         wakeupmessage = wakeupmessages[random.randint(0, len(wakeupmessages) - 1)]
         await client.get_channel(812437044935786527).send(wakeupmessage)
         print("I have woken everyone up")
+    if message.content.startswith('?swearing'):
+        if "Coder" not in str(message.author.roles):
+            await message.channel.send("You do not have the permissions to use this command")
+            return
+        if "on" in str(message.content):
+            NoSwearing = False
+            await message.channel.send("I have turned off the no swearing feature")
+        elif "off" in str(message.content):
+            NoSwearing = True
+            await message.channel.send("I have turned on the no swearing feature")
+    if message.content.startswith('?invite'):
+        await message.channel.send("https://discord.com/api/oauth2/authorize?client_id=1146443770578075758&permissions=8&scope=bot")
     if message.content.startswith('?live'):
         if "Coder" in str(message.author.roles):
             killAttempts = 0
@@ -149,10 +192,7 @@ async def on_message(message):
             await message.author.send(i)
 
 
-    username = str(message.author).split('#')[0]
-    user_message = str(message.content)
-    channel = str(message.channel.name)
-    print(f'{username}:{user_message}:({channel})')
+    
     if "hear me out" in message.content.lower():
         if "oseidu" in str(message.author):
             await message.channel.send("No one is hearing you out🤮")
@@ -179,6 +219,35 @@ async def on_message(message):
 
     if message.content.lower() == 'pong':
         await message.channel.send('ping')
+
+    if message.content.lower() == 'ding':
+        await message.channel.send('dong')
+
+    if message.content.lower() == 'sing':
+        await message.channel.send('song')
+
+    ### APIS/
+    if message.content.startswith('?openai'):
+        try:
+            await message.channel.send(openai.Completion.create(engine="davinci", prompt=str(message.content)[8:],
+                                                                max_tokens=100))
+        except Exception as err:
+            print(err)
+            await message.channel.send("I am not sure what you are trying to say")  
+    if message.content.startswith('?chat'):
+        try:
+            response = openai.Completion.create(
+            engine="text-davinci-002",  # You can specify a different engine if needed
+            prompt=message.content[6:],
+            max_tokens=50  # Adjust the max tokens based on your requirements
+        )
+            bot_response = response.choices[0].text
+            await message.channel.send(bot_response)
+        except Exception as err:
+            print(err)
+            await message.channel.sendpwd("You have to pay for this feature and I'm broke")
+            #await message.channel.send("I am not sure what you are trying to say")
+        
 
     if message.content.startswith('?deletesaved'):
         savedmessages = open('savedmessages.txt', 'r').readlines()
@@ -215,7 +284,7 @@ async def on_message(message):
     if message.content == '?private':
         await message.author.send("Why are you asking to speak to me in private. You are a bit sus mate")
     for word in blocked_words:
-        if "Coder" not in str(message.author.roles) and word in str(message.content.lower()):
+        if "Coder" not in str(message.author.roles) and word in str(message.content.lower()) and NoSwearing:
             await message.delete()
             await message.channel.send(
                 f"{username} please refrain from using language like that in this discord server!")
@@ -451,6 +520,7 @@ async def on_message(message):
                         print(err)
                         looping = False
                         break
+        
 
 
 client.run(TOKEN)

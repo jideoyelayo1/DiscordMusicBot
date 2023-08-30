@@ -1,37 +1,42 @@
-Hello there
-I am a discord bot
-I was initially made to help with music but I also can do other cool things
-I dmed you this message because you sent me a "?help"
-If you ever want to a random number you can say "?random" or "?odds" followed by a number
-I will then give you a random integer between 0 and your number
-I block words as well
-When you say PING i say PONG, when you say MARCO i say POLO
-I'm like your best friend lol XD
-you can message me privately by saying ?private or publicly by saying ?hello
-MUSIC SETTINGS:
-?viewurls displays the urls in the playlist
-?deletelast deletes last url in the playlist
-?addurl add url to the playlist
-?addsong add song to the playlist
-?playurl plays this url if nothing else is playing
-?play plays song even if something is alreaady playing
-?pause pause music
-?resume resume music
-?stop stop and discount bot
-?clear clear playlist
-?skip skip song in playlist
-?rewind restart current song in playlist
-?back goes back a song in playlist
-?resetIndex starts playlist from beginning
-?currentPlaylistSong displays song currently playing
-?stopplaylist stops playlist similar to ?stop but also resets playlist to beginning
-?startplaylist starts playing songs in playlist
-?save save the current message you are typing
-?showsaved dms you your saved messages
-?deletesaved all your saved messages
-MORE features soon to be added.
-for more information contact maker of this bot:
-Github: jideoyelayo1
-Email: JideOyelayo1@Gmail.com
-https://github.com/jideoyelayo1
-YOU CAN REPLY/DM ME HERE AND I WILL TELL OUR CREATOR
+## Welcome to My Discord Bot!
+
+Hello there! I am a versatile Discord bot designed to provide various useful features for your server. While my primary function was initially centered around music, I've expanded my capabilities to include even more cool features.
+
+**Music Commands:**
+- `?viewurls`: Display the URLs in the current playlist.
+- `?deletelast`: Delete the last URL in the playlist.
+- `?addurl [URL]`: Add a specific URL to the playlist.
+- `?addsong [query]`: Search for a song and add it to the playlist.
+- `?playurl [URL]`: Play a specific URL, even if something else is playing.
+- `?play [query]`: Search for a song, play it, and manage the playlist.
+- `?pause`: Pause the currently playing music.
+- `?resume`: Resume the paused music.
+- `?stop`: Stop the music and disconnect the bot.
+- `?clear`: Clear the entire playlist.
+- `?skip`: Skip the current song in the playlist.
+- `?rewind`: Restart the current song in the playlist.
+- `?back`: Go back to the previous song in the playlist.
+- `?resetIndex`: Start the playlist from the beginning.
+- `?currentPlaylistSong`: Display the currently playing song.
+- `?stopplaylist`: Stop the playlist and disconnect the bot.
+- `?startplaylist`: Start playing songs in the playlist.
+
+**Other Commands:**
+- `?random [number]` or `?odds [number]`: Get a random integer between 0 and the specified number.
+- Swear word blocking: I help keep your server clean by blocking certain words.
+- Fun responses: Try saying "PING" and see what I respond with!
+- Private and public messages: Use `?private` for private messages and `?hello` for public messages.
+- `?chat [your message]`: Engage in a chat conversation with the bot (premium feature).
+
+I also offer the ability to save and view your messages privately. Type `?save [your message]` to save a message, and `?showsaved` to see your saved messages.
+
+More features are coming soon, so stay tuned for updates!
+
+For more information or assistance, feel free to contact my creator:
+
+- GitHub: [jideoyelayo1](https://github.com/jideoyelayo1)
+- Email: [JideOyelayo1@Gmail.com](mailto:JideOyelayo1@Gmail.com)
+
+You can also reply or DM me here, and I will relay your message to our creator.
+
+Happy botting!
