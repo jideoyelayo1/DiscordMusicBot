@@ -191,7 +191,7 @@ async def on_message(message):
         for i in blocked_words:
             await message.author.send(i)
 
-
+    
     
     if "hear me out" in message.content.lower():
         if "oseidu" in str(message.author):
@@ -227,26 +227,50 @@ async def on_message(message):
         await message.channel.send('song')
 
     ### APIS/
-    if message.content.startswith('?openai'):
-        try:
-            await message.channel.send(openai.Completion.create(engine="davinci", prompt=str(message.content)[8:],
-                                                                max_tokens=100))
-        except Exception as err:
-            print(err)
-            await message.channel.send("I am not sure what you are trying to say")  
-    if message.content.startswith('?chat'):
+    
+    if message.content.startswith('?davi'):
         try:
             response = openai.Completion.create(
-            engine="text-davinci-002",  # You can specify a different engine if needed
+            engine="text-davinci-003",  # You can specify a different engine if needed
             prompt=message.content[6:],
-            max_tokens=50  # Adjust the max tokens based on your requirements
+            max_tokens=200  # Adjust the max tokens based on your requirements
         )
             bot_response = response.choices[0].text
             await message.channel.send(bot_response)
         except Exception as err:
             print(err)
-            await message.channel.sendpwd("You have to pay for this feature and I'm broke")
+            await message.channel.send("You have to pay for this feature and I'm broke")
             #await message.channel.send("I am not sure what you are trying to say")
+        return
+    if message.content.startswith('?ask'):
+        try:
+            response = openai.Completion.create(
+            engine="text-davinci-001",  # You can specify a different engine if needed
+            prompt=message.content[5:],
+            max_tokens=200  # Adjust the max tokens based on your requirements
+        )
+            bot_response = response.choices[0].text
+            await message.channel.send(bot_response)
+        except Exception as err:
+            print(err)
+            await message.channel.send("You have to pay for this feature and I'm broke")
+            #await message.channel.send("I am not sure what you are trying to say")
+        return
+    if message.content.startswith('?chat'):
+        try:
+            response = openai.Completion.create(
+            engine="text-davinci-002",  # You can specify a different engine if needed
+            prompt=message.content[6:],
+            max_tokens=200  # Adjust the max tokens based on your requirements
+        )
+            bot_response = response.choices[0].text
+            await message.channel.send(bot_response)
+        except Exception as err:
+            print(err)
+            await message.channel.send("You have to pay for this feature and I'm broke")
+            #await message.channel.send("I am not sure what you are trying to say")
+        return
+    
         
 
     if message.content.startswith('?deletesaved'):

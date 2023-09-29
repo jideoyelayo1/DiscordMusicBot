@@ -1,7 +1,5 @@
 ## Welcome to My Discord Bot!
-
 Hello there! I am a versatile Discord bot designed to provide various useful features for your server. While my primary function was initially centered around music, I've expanded my capabilities to include even more cool features.
-
 **Music Commands:**
 - `?viewurls`: Display the URLs in the current playlist.
 - `?deletelast`: Delete the last URL in the playlist.
@@ -20,23 +18,16 @@ Hello there! I am a versatile Discord bot designed to provide various useful fea
 - `?currentPlaylistSong`: Display the currently playing song.
 - `?stopplaylist`: Stop the playlist and disconnect the bot.
 - `?startplaylist`: Start playing songs in the playlist.
-
 **Other Commands:**
 - `?random [number]` or `?odds [number]`: Get a random integer between 0 and the specified number.
 - Swear word blocking: I help keep your server clean by blocking certain words.
 - Fun responses: Try saying "PING" and see what I respond with!
 - Private and public messages: Use `?private` for private messages and `?hello` for public messages.
 - `?chat [your message]`: Engage in a chat conversation with the bot (premium feature).
-
 I also offer the ability to save and view your messages privately. Type `?save [your message]` to save a message, and `?showsaved` to see your saved messages.
-
 More features are coming soon, so stay tuned for updates!
-
 For more information or assistance, feel free to contact my creator:
-
 - GitHub: [jideoyelayo1](https://github.com/jideoyelayo1)
 - Email: [JideOyelayo1@Gmail.com](mailto:JideOyelayo1@Gmail.com)
-
 You can also reply or DM me here, and I will relay your message to our creator.
-
 Happy botting!
